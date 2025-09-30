@@ -1,24 +1,27 @@
 # The Visual Occluders Dataset
 
-This repository contains the code necessary to apply the Visual Occluders 
-Dataset to images, either to make new datasets or during model 
-training/evaluation to apply occluders to inputs during the dataloading process. 
-The figure below summarizes the dataset as used in an upcoming publication:
+This repository contains useful code related to the Visual Occluders 
+Dataset ([download](
+https://drive.google.com/file/d/1BSQk5L94GNNqIOB7a-iKwjE_nDd8esHK/view?usp=share_link)).
+See Occlude.py for code which applies the occluders to any image. This code 
+can be used to either create an occluded version of a dataset, or to augment 
+DNN training / evaluation inputs as they are loaded. The dataset contains up to 
+1000 unique occluder masks for each occluder type and visibility level shown in the image below.
 
-![Alt text](VOD.png)
+![The Visual Occluders Dataset](images/VOD.png)
 
-The Visual Occluders Dataset and application to images. (A) Examples of each
-occluder type (upper two rows) and visibility level (lower row), with visibility
-indicating the approximate area of an underlying image (±5%) that remains
-visible after the occluder is applied. The dataset contains 32 different
-occluder types (2 natural, 30 artificial), each of which contains up to 1000
-individual occluder masks for each visibility level. Eight examples are shown
-for each of the two natural types in the green and brown boxes. For the purposes
-of the present study, the 30 artificial occluder types (one example shown per
-type) were combined into three arbitrary groups shown by the blue, red and
-purple boxes. (B) Procedure for applying occluders within the SimCLR dataset
-augmentation (Chen et al. 2020). See Materials and Methods for more
-information. (C) Example input images from each type of occlusion training.
+Each occluder type is stored in a separate directory, with subdirectories 
+indicating the approximate visibility level of an underlying image once 
+occluded (e.g. 10%, 20%, ..., 90%). Within each of these directories, the 
+occluder masks are stored both as separate images and grouped into a PyTorch 
+tensor (occluders.pt) for easy loading in deep learning applications. 
+Natural occluders are stored in RGBA format, while all others are stored in 
+L format for efficiency. These will appear inverted in the dataset itself, but 
+will take their expected form once set as the alpha layer in an RGBA or LA 
+image of your choosing. They can then be pasted onto any image using 
+standard image processing libraries such as PIL or OpenCV.
 
-The Visual Occluders Dataset can be downloaded [here](
-https://drive.google.com/file/d/1BSQk5L94GNNqIOB7a-iKwjE_nDd8esHK/view?usp=share_link).
+The paper accompanying this dataset is in preparation, but for now please 
+cite the following related work if you use this dataset in your research:
+
+David Coggan, Frank Tong; Naturalistic dataset augmentation and self-supervised learning lead to more human-like recognition of occluded objects in convolutional neural networks. Journal of Vision 2024;24(10):1335. https://doi.org/10.1167/jov.24.10.1335.
